@@ -25,7 +25,6 @@ class Pattern{
 			$regex = preg_replace('/\:'.$n.'/', '('.$r.')', $regex);
 		}
 
-
 		$regex = preg_replace('/\:[a-zA-Z0-9]+\?/', '{0,}([a-zA-Z0-9_-\s]{0,})', $regex);
 		$regex = preg_replace('/\:[a-zA-Z0-9]+/', '([a-zA-Z0-9_-\s]+)', $regex);
 		$regex = preg_replace('/\//', '\/', $regex);
@@ -49,7 +48,7 @@ class Pattern{
 	}
 
 	public function hasMatch(){
-		return preg_match_all('/'. $this->toRegex() .'$/', Request::get(), $matches);
+		return preg_match_all('/^'. $this->toRegex() .'$/', Request::get(), $matches);
 	}
 
 	public function rule($name, $pattern = ''){
