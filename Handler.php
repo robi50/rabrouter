@@ -28,15 +28,17 @@ class Handler{
 	private function handle(){
 		if(is_callable($this->handler)){
 			echo call_user_func_array($this->handler, $this->pattern->getParams());
-		}elseif(is_string($this->handler) && class_exists($this->handler)){
-			$this->handleWithObject(new $this->handler);
+		}elseif(is_string($this->handler)){
+			$p = explode('@', $this->handler);
+
+			$this->handleWithObject(new $p[0], count($p) > 1 ? $p[1] : null);
 		}elseif(is_object($this->handler)){
 			$this->handleWithObject($this->handler);
 		}
 	}
 
-	private function handleWithObject($h){
-		echo call_user_func_array([$h, $_POST ? 'post' : 'get'], $this->pattern->getParams());
+	private function handleWithObject($h, $m = null){
+		echo call_user_func_array([$h, $m ? $m : ($_POST ? 'post' : 'get')], $this->pattern->getParams());
 	}
 
 }
