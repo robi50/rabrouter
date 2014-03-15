@@ -44,6 +44,8 @@ class Pattern{
 
 		foreach($t as $p) $params = array_merge($params, $p);
 
+		for($i = 0; $i < count($params); $i++) if(strlen($params[$i]) == 0) array_splice($params, $i, 1);
+
 		return $params;
 	}
 
