@@ -16,4 +16,8 @@ class Router{
 		}
 	}
 
+	public static function where(){
+		call_user_func_array('\Rab\Pattern::define', func_get_args());
+	}
+
 }
