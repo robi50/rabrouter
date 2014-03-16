@@ -11,7 +11,7 @@ class Pattern{
 	private static $patterns = [];
 
 	public function __construct($pattern){
-		$this->pattern = rtrim($pattern, '/');
+		$this->pattern = trim($pattern, '/');
 	}
 
 	public function toRegex(){
