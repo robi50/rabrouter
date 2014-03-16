@@ -10,6 +10,16 @@ class Pattern{
 
 	private static $patterns = [];
 
+	private static $flags = [
+
+		'digit' => '[0-9]+',
+
+		'alpha' => '[a-zA-Z]+',
+
+		'alphanum' => '[a-zA-Z0-9]+'
+
+	];
+
 	public function __construct($pattern){
 		$this->pattern = trim($pattern, '/');
 	}
@@ -17,12 +27,16 @@ class Pattern{
 	public function toRegex(){
 		$regex = $this->pattern;
 
+		foreach(self::$flags as $n => $r){
+			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
+		}
+
 		foreach($this->rules as $n => $r){
-			$regex = preg_replace('/\:'.$n.'/', '('.$r.')', $regex);
+			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
 		}
 
 		foreach(self::$patterns as $n => $r){
-			$regex = preg_replace('/\:'.$n.'/', '('.$r.')', $regex);
+			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
 		}
 
 		$regex = preg_replace('/\:[a-zA-Z0-9]+\?/', '{0,}([a-zA-Z0-9_-\s]{0,})', $regex);
