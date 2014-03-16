@@ -10,13 +10,18 @@ class Handler{
 
 	private $rules = [];
 
+	private static $match = false;
+
 	public function __construct($pattern, $handler){
 		$this->pattern = new Pattern($pattern);
 		$this->handler = $handler;
 	}
 
 	public function __destruct(){
-		if($this->pattern->hasMatch()) $this->handle();
+		if($this->pattern->hasMatch() && !self::$match){
+			$this->handle();
+			self::$match = true;
+		}
 	}
 
 	public function where(){
