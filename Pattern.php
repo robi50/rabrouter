@@ -38,8 +38,8 @@ class Pattern{
 		$this->pattern = trim($this->pattern, '/');
 	}
 
-	public function toRegex(){
-		$regex = $this->pattern;
+	public function toRegex($pattern = null){
+		$regex = $pattern ? $pattern : $this->pattern;
 
 		$regex = $this->parseFlags($regex);
 
@@ -80,7 +80,7 @@ class Pattern{
 	}
 
 	public function parseRequestParams(){
-		$regex = '/\[(GET|POST)\:(.*?)\]/';
+		$regex = '/\[(GET|POST)\|(.*?)\]/';
 
 		if(preg_match_all($regex, $this->pattern, $matches)){
 			for($i = 0; $i < count($matches[1]); $i++){
@@ -94,8 +94,8 @@ class Pattern{
 	}
 
 	public function hasRequestParamsMatch(){
-		foreach($this->requestParams['GET'] as $k => $v) if(!isset($_GET[$k]) || !preg_match('/^'.$v.'$/', $_GET[$k])) return false;
-		foreach($this->requestParams['POST'] as $k => $v) if(!isset($_POST[$k]) || !preg_match('/^'.$v.'$/', $_POST[$k])) return false;
+		foreach($this->requestParams['GET'] as $k => $v) if(!isset($_GET[$k]) || !preg_match('/^'.$this->toRegex($v).'$/', $_GET[$k])) return false;
+		foreach($this->requestParams['POST'] as $k => $v) if(!isset($_POST[$k]) || !preg_match('/^'.$this->toRegex($v).'$/', $_POST[$k])) return false;
 
 		return true;
 	}
