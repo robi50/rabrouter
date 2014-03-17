@@ -23,7 +23,7 @@ class Users{
 	];
 
 	public function home(){
-		return 'these are users: ' . implode(',', arraY_keys($this->users));
+		return 'these are users: ' . implode(',', array_keys($this->users));
 	}
 
 	public function info($id){

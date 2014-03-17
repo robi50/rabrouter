@@ -18,7 +18,7 @@ class Handler{
 	}
 
 	public function __destruct(){
-		if($this->pattern->hasMatch() && !self::$match){
+		if($this->pattern->hasMatch() && $this->pattern->hasRequestParamsMatch() && !self::$match){
 			$this->handle();
 			self::$match = true;
 		}
