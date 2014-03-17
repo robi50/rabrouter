@@ -33,8 +33,9 @@ class Pattern{
 	];
 
 	public function __construct($pattern){
-		$this->pattern = trim($pattern, '/');
+		$this->pattern = $pattern;
 		$this->parseRequestParams();
+		$this->pattern = trim($this->pattern, '/');
 	}
 
 	public function toRegex(){
