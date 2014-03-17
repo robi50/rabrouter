@@ -44,14 +44,17 @@ class Pattern{
 		$regex = $this->pattern;
 
 		foreach(self::$flags as $n => $r){
+			$regex = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $regex);
 			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
 		}
 
 		foreach($this->rules as $n => $r){
+			$regex = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $regex);
 			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
 		}
 
 		foreach(self::$patterns as $n => $r){
+			$regex = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $regex);
 			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
 		}
 
