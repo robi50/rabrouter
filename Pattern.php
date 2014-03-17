@@ -24,15 +24,15 @@ class Pattern{
 
 		'alpha' => '[a-zA-Z]+',
 
-		'alphanum' => '[a-zA-Z0-9]+'
+		'alphanum' => '[a-zA-Z0-9]+',
+
+		'any' => '.*?'
 
 	];
 
 	public function __construct($pattern){
 		$this->pattern = trim($pattern, '/');
 		$this->parseRequestParams();
-
-		echo $this->pattern;
 	}
 
 	public function toRegex(){
