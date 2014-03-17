@@ -6,6 +6,8 @@ class Pattern{
 
 	private $pattern = '';
 
+	private $regex = '';
+
 	private $rules = [];
 
 	private $requestParams = [
@@ -34,6 +36,7 @@ class Pattern{
 
 	public function __construct($pattern){
 		$this->pattern = trim($pattern, '/');
+		$this->regex = $this->toRegex();
 		$this->parseRequestParams();
 	}
 
@@ -64,7 +67,7 @@ class Pattern{
 	}
 
 	public function getParams(){
-		preg_match_all('/'. $this->toRegex() .'/', Request::get(), $matches);
+		preg_match_all('/'. $this->regex .'/', Request::get(), $matches);
 
 		$params = [];
 		$t = array_slice($matches, 1);
@@ -77,7 +80,7 @@ class Pattern{
 	}
 
 	public function hasMatch(){
-		return preg_match_all('/^'. $this->toRegex() .'$/', Request::get(), $matches);
+		return preg_match_all('/^'. $this->regex .'$/', Request::get(), $matches);
 	}
 
 	public function rule($name, $pattern = ''){
