@@ -94,8 +94,8 @@ class Pattern{
 	}
 
 	public function hasRequestParamsMatch(){
-		foreach($this->requestParams['GET'] as $k => $v) if(!isset($_GET[$k]) || $_GET[$k] != $v) return false;
-		foreach($this->requestParams['POST'] as $k => $v) if(!isset($_POST[$k]) || $_POST[$k] != $v) return false;
+		foreach($this->requestParams['GET'] as $k => $v) if(!isset($_GET[$k]) || !preg_match('/^'.$v.'$/', $_GET[$k])) return false;
+		foreach($this->requestParams['POST'] as $k => $v) if(!isset($_POST[$k]) || !preg_match('/^'.$v.'$/', $_POST[$k])) return false;
 
 		return true;
 	}
