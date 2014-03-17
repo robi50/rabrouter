@@ -36,8 +36,8 @@ class Pattern{
 
 	public function __construct($pattern){
 		$this->pattern = trim($pattern, '/');
-		$this->regex = $this->toRegex();
 		$this->parseRequestParams();
+		$this->regex = $this->toRegex();
 	}
 
 	public function toRegex(){
@@ -57,7 +57,7 @@ class Pattern{
 	}
 
 	public function getParams(){
-		preg_match_all('/'. $this->regex .'/', Request::get(), $matches);
+		preg_match_all('/'. $this->toRegex() .'/', Request::get(), $matches);
 
 		$params = [];
 		$t = array_slice($matches, 1);
@@ -70,7 +70,7 @@ class Pattern{
 	}
 
 	public function hasMatch(){
-		return preg_match_all('/^'. $this->regex .'$/', Request::get(), $matches);
+		return preg_match_all('/^'. $this->toRegex() .'$/', Request::get(), $matches);
 	}
 
 	public function rule($name, $pattern = ''){
@@ -103,9 +103,17 @@ class Pattern{
 	}
 
 	private function parseFlags($pattern){
-		$flags = array_merge(self::$flags, $this->rules, self::$patterns);
-
 		foreach(self::$flags as $n => $r){
+			$pattern = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $pattern);
+			$pattern = preg_replace('/\:'.$n.'\b/', '('.$r.')', $pattern);
+		}
+
+		foreach($this->rules as $n => $r){
+			$pattern = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $pattern);
+			$pattern = preg_replace('/\:'.$n.'\b/', '('.$r.')', $pattern);
+		}
+
+		foreach(self::$patterns as $n => $r){
 			$pattern = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $pattern);
 			$pattern = preg_replace('/\:'.$n.'\b/', '('.$r.')', $pattern);
 		}
