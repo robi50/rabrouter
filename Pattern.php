@@ -43,20 +43,7 @@ class Pattern{
 	public function toRegex(){
 		$regex = $this->pattern;
 
-		foreach(self::$flags as $n => $r){
-			$regex = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $regex);
-			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
-		}
-
-		foreach($this->rules as $n => $r){
-			$regex = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $regex);
-			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
-		}
-
-		foreach(self::$patterns as $n => $r){
-			$regex = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $regex);
-			$regex = preg_replace('/\:'.$n.'\b/', '('.$r.')', $regex);
-		}
+		$regex = $this->parseFlags($regex);
 
 		$regex = preg_replace('/\:[a-zA-Z0-9]+\?/', '{0,}([a-zA-Z0-9_-\s]{0,})', $regex);
 		$regex = preg_replace('/\:[a-zA-Z0-9]+/', '([a-zA-Z0-9_-\s]+)', $regex);
@@ -113,6 +100,17 @@ class Pattern{
 		foreach($this->requestParams['POST'] as $k => $v) if(!isset($_POST[$k]) || $_POST[$k] != $v) return false;
 
 		return true;
+	}
+
+	private function parseFlags($pattern){
+		$flags = array_merge(self::$flags, $this->rules, self::$patterns);
+
+		foreach(self::$flags as $n => $r){
+			$pattern = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $pattern);
+			$pattern = preg_replace('/\:'.$n.'\b/', '('.$r.')', $pattern);
+		}
+
+		return $pattern;
 	}
 
 	public static function define($name, $pattern = ''){
