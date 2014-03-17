@@ -43,7 +43,9 @@ class Handler{
 	}
 
 	private function handleWithObject($h, $m = null){
-		echo call_user_func_array([$h, $m ? $m : ($_POST ? 'post' : 'get')], $this->pattern->getParams());
+		$m = $_POST ? 'post' : 'get';
+
+		if(method_exists($h, $m)) echo call_user_func_array([$h, $m], $this->pattern->getParams());
 	}
 
 }
