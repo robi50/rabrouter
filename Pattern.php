@@ -80,7 +80,7 @@ class Pattern{
 	}
 
 	public function parseRequestParams(){
-		$regex = '/\[(GET|POST)\|(.*?)\]/';
+		$regex = '/\[(GET|POST)\:(.*?)\]/';
 
 		if(preg_match_all($regex, $this->pattern, $matches)){
 			for($i = 0; $i < count($matches[1]); $i++){
