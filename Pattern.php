@@ -26,7 +26,9 @@ class Pattern{
 
 		'alphanum' => '[a-zA-Z0-9]+',
 
-		'any' => '.*?'
+		'any' => '[^/]+',
+
+		'every' => '.*'
 
 	];
 
