@@ -6,8 +6,6 @@ class Pattern{
 
 	private $pattern = '';
 
-	private $regex = '';
-
 	private $rules = [];
 
 	private $requestParams = [
@@ -37,7 +35,6 @@ class Pattern{
 	public function __construct($pattern){
 		$this->pattern = trim($pattern, '/');
 		$this->parseRequestParams();
-		$this->regex = $this->toRegex();
 	}
 
 	public function toRegex(){
