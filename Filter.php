@@ -10,6 +10,8 @@ class Filter{
 
 	public static $filters = [];
 
+	public static $filterGroups = [];
+
 	public function __construct($controller, $denied = null){
 		$this->controller = $controller;
 		$this->denied = $denied;
@@ -28,6 +30,16 @@ class Filter{
 
 			return false;
 		}
+	}
+
+	public static function parsePattern($pattern){
+		// replace group names with filters
+		$pattern = preg_replace_callback('/\*([a-zA-Z0-9_-]+)/', function($matches){
+			return self::$filterGroups[$matches[1]];
+		}, $pattern);
+
+		// explode pattern to filters
+		return explode('|', preg_replace('/[\s]+/', '', $pattern));
 	}
 
 }

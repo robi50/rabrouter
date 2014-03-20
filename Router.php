@@ -22,7 +22,11 @@ class Router{
 	}
 
 	public static function filter($name, $controller, $denied = null){
-		Filter::$filters[$name] = [$controller, $denied];
+		if($name[0] == '*'){
+			Filter::$filterGroups[substr($name, 1)] = $controller;
+		}else{
+			Filter::$filters[$name] = [$controller, $denied];
+		}
 	}	
 
 }

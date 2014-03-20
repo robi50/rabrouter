@@ -41,16 +41,24 @@ class Handler{
 	}
 
 	public function filter($type, $controller, $denied = null){
+		// is filter pattern
 		if(is_string($controller)){
-			$cs = explode('|', preg_replace('/[\s]+/', '', $controller));
+			// parse pattern. get filter names
+			$fs = Filter::parsePattern($controller);
 
-			foreach($cs as $c){
-				$filter = Filter::$filters[$c];
+			// filter name loop
+			foreach($fs as $f){
+				$filter = Filter::$filters[$f];
+				// add filter to current handler
 				$this->filters[$type][] = new Filter($filter[0], $filter[1]);
 			}
-		}elseif(is_callable($controller)){
+		}
+		// is filter controller
+		elseif(is_callable($controller)){
 			$this->filters[$type][] = new Filter($controller, $denied);
-		}elseif($controller instanceof Filter){
+		}
+		// is Filter object
+		elseif($controller instanceof Filter){
 			$this->filters[$type][] = $controller;
 		}
 
