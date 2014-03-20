@@ -48,4 +48,4 @@ Router::handle('users', 'Users@home');
 
 Router::handle('users/:digit', 'Users@info');
 
-Router::handle(':any', 'Users@none')->where('any', '.*');
+Router::handle(':every', 'Users@none');
