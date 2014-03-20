@@ -10,7 +10,15 @@ class Handler{
 
 	private $rules = [];
 
-	private static $match = false;
+	private $filters = [
+
+		'before' => [],
+
+		'after' => []
+
+	];
+
+	public static $match = false;
 
 	public function __construct($pattern, $handler){
 		$this->pattern = new Pattern($pattern);
@@ -18,9 +26,11 @@ class Handler{
 	}
 
 	public function __destruct(){
-		if($this->pattern->hasMatch() && $this->pattern->hasRequestParamsMatch() && !self::$match){
+		if($this->pattern->hasMatch() && $this->pattern->hasRequestParamsMatch() && !self::$match && $this->checkBeforeFilters()){
 			$this->handle();
 			self::$match = true;
+
+			$this->checkAfterFilters();
 		}
 	}
 
@@ -28,6 +38,35 @@ class Handler{
 		call_user_func_array([$this->pattern, 'rule'], func_get_args());
 
 		return $this;
+	}
+
+	public function filter($type, $controller, $denied = null){
+		if(is_string($controller)){
+			$cs = explode('|', preg_replace('/[\s]+/', '', $controller));
+
+			foreach($cs as $c){
+				$filter = Filter::$filters[$c];
+				$this->filters[$type][] = new Filter($filter[0], $filter[1]);
+			}
+		}elseif(is_callable($controller)){
+			$this->filters[$type][] = new Filter($controller, $denied);
+		}elseif($controller instanceof Filter){
+			$this->filters[$type][] = $controller;
+		}
+
+		return $this;
+	}
+
+	private function checkBeforeFilters(){
+		foreach($this->filters['before'] as $f){
+			if(!$f->hasFilterAccess($this->pattern->getParams())) return false;
+		}
+
+		return true;
+	}
+
+	private function checkAfterFilters(){
+		foreach($this->filters['after'] as $f) $f->hasFilterAccess($this->pattern->getParams());
 	}
 
 	private function handle(){

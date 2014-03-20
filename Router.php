@@ -4,6 +4,7 @@ namespace Rab;
 
 require 'Request.php';
 require 'Pattern.php';
+require 'Filter.php';
 require 'Handler.php';
 
 class Router{
@@ -19,5 +20,9 @@ class Router{
 	public static function where(){
 		call_user_func_array('\Rab\Pattern::define', func_get_args());
 	}
+
+	public static function filter($name, $controller, $denied = null){
+		Filter::$filters[$name] = [$controller, $denied];
+	}	
 
 }

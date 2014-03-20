@@ -8,6 +8,8 @@ class Pattern{
 
 	private $rules = [];
 
+	private $params = null;
+
 	private $requestParams = [
 
 		'GET' => [],
@@ -55,16 +57,20 @@ class Pattern{
 	}
 
 	public function getParams(){
-		preg_match_all('/'. $this->toRegex() .'/', Request::get(), $matches);
+		if(!$this->params){
+			preg_match_all('/'. $this->toRegex() .'/', Request::get(), $matches);
 
-		$params = [];
-		$t = array_slice($matches, 1);
+			$params = [];
+			$t = array_slice($matches, 1);
 
-		foreach($t as $p) $params = array_merge($params, $p);
+			foreach($t as $p) $params = array_merge($params, $p);
 
-		for($i = 0; $i < count($params); $i++) if(strlen($params[$i]) == 0) array_splice($params, $i, 1);
+			for($i = 0; $i < count($params); $i++) if(strlen($params[$i]) == 0) array_splice($params, $i, 1);
 
-		return $params;
+			$this->params = $params;
+		}
+
+		return $this->params;
 	}
 
 	public function hasMatch(){
