@@ -15,6 +15,8 @@ class Router{
 	 * @param string $pattern // router pattern
 	 * @param mixin $handler // router handler
 	 *
+	 * @param array $pattern // list of handler defines
+	 *
 	 * @return object Handler
 	 */
 	public static function handle($pattern, $handler = null){

@@ -4,12 +4,16 @@ namespace Rab;
 
 class Pattern{
 
+	// Pattern 
 	private $pattern = '';
 
+	// Local pattern flags
 	private $rules = [];
 
+	// Pattern param buffer
 	private $params = null;
 
+	// GET, POST request params
 	private $requestParams = [
 
 		'GET' => [],
@@ -18,8 +22,10 @@ class Pattern{
 
 	];
 
+	// Global flags
 	private static $patterns = [];
 
+	// Native flags
 	private static $flags = [
 
 		'digit' => '[0-9]+',
@@ -40,6 +46,11 @@ class Pattern{
 		$this->pattern = trim($this->pattern, '/');
 	}
 
+	/**
+	 * Parse pattern to regex.
+	 *
+	 * @return string
+	 */
 	public function toRegex($pattern = null){
 		$regex = $pattern ? $pattern : $this->pattern;
 
@@ -52,6 +63,11 @@ class Pattern{
 		return $regex;
 	}
 
+	/**
+	 * Get pattern.
+	 *
+	 * @return void
+	 */
 	public function toString(){
 		return $this->pattern;
 	}
@@ -73,10 +89,25 @@ class Pattern{
 		return $this->params;
 	}
 
+	/**
+	 * Check request and pattern are matched.
+	 *
+	 * @return boolean
+	 */
 	public function hasMatch(){
 		return preg_match_all('/^'. $this->toRegex() .'$/', Request::get(), $matches);
 	}
 
+	/**
+	 * Define local pattern flag.
+	 *
+	 * @param string $name // Flag name
+	 * @param string $pattern // Flag pattern
+	 *
+	 * @param array $name // List of flag defines
+	 *
+	 * @return void
+	 */
 	public function rule($name, $pattern = ''){
 		if(is_array($name)){
 			foreach($name as $n => $p) $this->rules[$n] = $p;
@@ -85,6 +116,11 @@ class Pattern{
 		}
 	}
 
+	/**
+	 * Parse GET, POST request parameters.
+	 *
+	 * @return void 
+	 */
 	public function parseRequestParams(){
 		$regex = '/\[(GET|POST)\|(.*?)\]/';
 
@@ -106,6 +142,13 @@ class Pattern{
 		return true;
 	}
 
+	/**
+	 * Parse flags like ':digit', ':alpha', ':foo' to values which is regex.
+	 * 
+	 * @param string $pattern // Target pattern
+	 *
+	 * @return void
+	 */
 	private function parseFlags($pattern){
 		foreach(self::$flags as $n => $r){
 			$pattern = preg_replace('/\:'.$n.'\?/', '{0,}('.$r.'){0,}', $pattern);
@@ -125,6 +168,16 @@ class Pattern{
 		return $pattern;
 	}
 
+	/**
+	 * Define global pattern flag.
+	 *
+	 * @param string $name // Flag name
+	 * @param string $pattern // Flag pattern
+	 *
+	 * @param array $name // List of flag defines
+	 *
+	 * @return void
+	 */
 	public static function define($name, $pattern = ''){
 		if(is_array($name)){
 			foreach($name as $n => $p) self::$patterns[$n] = $p;

@@ -41,23 +41,23 @@ class Handler{
 	}
 
 	public function filter($type, $controller, $denied = null){
-		// is filter pattern
+		// Is filter pattern
 		if(is_string($controller)){
-			// parse pattern. get filter names
+			// Parse pattern. get filter names
 			$fs = Filter::parsePattern($controller);
 
-			// filter name loop
+			// Filter name loop
 			foreach($fs as $f){
 				$filter = Filter::$filters[$f];
 				// add filter to current handler
 				$this->filters[$type][] = new Filter($filter[0], $filter[1]);
 			}
 		}
-		// is filter controller
+		// Is filter controller
 		elseif(is_callable($controller)){
 			$this->filters[$type][] = new Filter($controller, $denied);
 		}
-		// is Filter object
+		// Is Filter object
 		elseif($controller instanceof Filter){
 			$this->filters[$type][] = $controller;
 		}
