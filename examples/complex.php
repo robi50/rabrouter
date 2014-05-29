@@ -2,7 +2,7 @@
 
 require '../Router.php';
 
-use \Rab\Router;
+use \rabrouter\Router;
 
 class Users{
 

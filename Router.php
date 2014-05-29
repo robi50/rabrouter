@@ -1,6 +1,6 @@
 <?php
 
-namespace Rab;
+namespace rabrouter;
 
 require 'Request.php';
 require 'Pattern.php';
@@ -33,7 +33,7 @@ class Router{
 	 * @return void
 	 */
 	public static function where(){
-		call_user_func_array('\Rab\Pattern::define', func_get_args());
+		call_user_func_array('\rabrouter\Pattern::define', func_get_args());
 	}
 
 	/**

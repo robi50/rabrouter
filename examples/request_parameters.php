@@ -2,7 +2,7 @@
 
 require '../Router.php';
 
-use \Rab\Router;
+use \rabrouter\Router;
 
 Router::handle('watch[GET|v=:digit]', function(){
 	return 'video id is: ' . $_GET['v'];

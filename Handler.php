@@ -1,6 +1,6 @@
 <?php
 
-namespace Rab;
+namespace rabrouter;
 
 class Handler{
 
